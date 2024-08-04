@@ -33,3 +33,12 @@
 20240804	12:32:57	af457142-1290-4b29-b73d-90b42cd51d70	POST	/auth/register	undefined
 20240804	12:33:09	81f8bae7-a7bd-4b16-a6f5-03fcdc93b590	POST	/auth/register	undefined
 20240804	12:34:28	25a542d9-3b2f-4042-be03-6856566bd91a	POST	/auth/register	null
+20240804	12:43:14	d14755b2-3dfd-45a9-bc5e-c032ce866eda	POST	/auth/login	undefined
+20240804	12:43:16	17c7e5d2-528a-4bcd-9ec6-f320884039d4	POST	/auth/login	undefined
+20240804	12:43:17	0446ca31-118f-4ba7-b6b3-43d5d00e9da4	POST	/auth/login	undefined
+20240804	12:43:18	561b8d3e-2f99-4320-a1e6-06bbe8f9cfc4	POST	/auth/login	undefined
+20240804	12:43:18	934ff683-6198-4c0f-aee9-0a933a8d8301	POST	/auth/login	undefined
+20240804	12:43:19	193313d1-d427-4ec8-bcee-f8498b2895d7	POST	/auth/login	undefined
+20240804	12:43:20	393e43e0-10b4-45fb-b75c-ebd341446946	POST	/auth/login	undefined
+20240804	12:43:35	fcc49919-ce67-4f80-a576-3aa5bb97f25d	POST	/auth/login	undefined
+20240804	13:04:44	e2ed242b-e11a-4ad7-88e5-6219b3383f3c	POST	/auth/register	null

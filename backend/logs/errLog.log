@@ -3,3 +3,7 @@
 20240804	12:17:25	dcb8900f-91ec-4a7a-ab0e-e52d13aa7988	Error: Not allowed by CORS	POST	/auth/register	null
 20240804	12:20:23	fc0dcacf-bd14-49d3-b085-4b104d362ca1	TypeError: Cannot read properties of undefined (reading 'map')	POST	/auth/register	undefined
 20240804	12:34:28	f7d9ed9d-30fb-4563-8f6d-7a4977a6fa28	Error: Not allowed by CORS	POST	/auth/register	null
+20240804	12:43:20	8cf40dc7-09d5-4a02-ada9-bdc80e2c8c6e	Too Many Requests: Too many login attempts from this IP, please try again after a 60 second pause	POST	/login	undefined
+20240804	12:43:20	dd5d1afd-8a1b-4208-bd59-af63040b814f	Too Many Requests: Too many login attempts from this IP, please try again after a 60 second pause	POST	/login	undefined
+20240804	12:43:35	6337ad4b-0f46-4650-8824-bb8898bbad46	Too Many Requests: Too many login attempts from this IP, please try again after a 60 second pause	POST	/login	undefined
+20240804	13:04:44	929833cf-8692-4f70-92d4-c07e966db53f	Error: Not allowed by CORS	POST	/auth/register	null
