@@ -1,0 +1,5 @@
+20240804	12:16:27	a2c87159-043d-478b-8217-f9567f74e76f	Error: Not allowed by CORS	POST	/auth/register	null
+20240804	12:16:48	84098365-44c0-42ea-ae6a-8c743c205abe	Error: Not allowed by CORS	POST	/auth/register	null
+20240804	12:17:25	dcb8900f-91ec-4a7a-ab0e-e52d13aa7988	Error: Not allowed by CORS	POST	/auth/register	null
+20240804	12:20:23	fc0dcacf-bd14-49d3-b085-4b104d362ca1	TypeError: Cannot read properties of undefined (reading 'map')	POST	/auth/register	undefined
+20240804	12:34:28	f7d9ed9d-30fb-4563-8f6d-7a4977a6fa28	Error: Not allowed by CORS	POST	/auth/register	null
