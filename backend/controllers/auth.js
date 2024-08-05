@@ -8,7 +8,7 @@ const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
 
 const register = async (req, res) => {
-  const { email, password, phoneNumber, location, roles } = req.body;
+  const { email, password, phoneNumber, location, role } = req.body;
 
   try {
     const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -21,21 +21,21 @@ const register = async (req, res) => {
     const user = await prisma.user.create({
       data: {
         email,
-        avatar: req.fileUrls?.length === 0 ? "" : req.fileUrls[0],
+        avatar: req.fileUrls,
         password: hashedPassword,
         phoneNumber,
         location,
-        roles,
+        role,
       },
     });
 
     const accessToken = jwt.sign(
-      { userId: user.id, roles: user.roles },
+      { userId: user.id, role: user.role },
       accessTokenSecret,
       { expiresIn: "15m" }
     );
     const refreshToken = jwt.sign(
-      { userId: user.id, roles: user.roles },
+      { userId: user.id, role: user.role },
       refreshTokenSecret,
       { expiresIn: "7d" }
     );
@@ -67,12 +67,12 @@ const login = async (req, res) => {
     }
 
     const accessToken = jwt.sign(
-      { userId: user.id, roles: user.roles },
+      { userId: user.id, role: user.role },
       accessTokenSecret,
       { expiresIn: "15m" }
     );
     const refreshToken = jwt.sign(
-      { userId: user.id, roles: user.roles },
+      { userId: user.id, role: user.role },
       refreshTokenSecret,
       { expiresIn: "7d" }
     );
@@ -98,7 +98,7 @@ const refresh = (req, res) => {
     const user = jwt.verify(refreshToken, refreshTokenSecret);
 
     const accessToken = jwt.sign(
-      { userId: user.userId, roles: user.roles },
+      { userId: user.userId, role: user.role },
       accessTokenSecret,
       { expiresIn: "15m" }
     );

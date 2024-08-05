@@ -7,14 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  RENTER
+  ADMIN
+  OWNER
+}
+
 model User {
   id          Int      @id @default(autoincrement())
   email       String   @unique
   password    String
-  avatar      String?
+  avatar      String[]
   phoneNumber String
   location    String
-  roles       String[]
+  role        Role @default(RENTER)
   approved    Boolean  @default(false)
   active      Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -23,6 +29,7 @@ model User {
   ownedRents  Rent[]   @relation("OwnerRents") 
   rentedRents Rent[]   @relation("RenterRents") 
 }
+
 
 model Book {
   id             Int       @id @default(autoincrement())
@@ -35,7 +42,8 @@ model Book {
   ownerId        Int
   quantity       Int
   price          Float
-  image          String
+  image          String[]
+  rating         Int? @default(0)
   rented         Boolean   @default(false)
   approved       Boolean   @default(false)
   createdAt      DateTime  @default(now())

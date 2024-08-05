@@ -20,8 +20,10 @@ const uploadFiles = (req, res, next) => {
     } else if (err) {
       return res.status(500).json({ message: JSON.stringify(err) });
     }
-
-    req.fileUrls = req.files ?  req.files?.map((file) => file.path) : [];
+    req.fileUrls = [];
+    if (req.files) {
+      req.fileUrls = req.files?.map((file) => file.path);
+    }
     next();
   });
 };

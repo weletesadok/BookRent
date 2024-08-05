@@ -18,6 +18,9 @@ app.use(express.static("files"));
 app.use(cookieParser());
 
 app.use("/auth", require("./routes/auth"));
+app.use("/book", require("./routes/book"));
+app.use("/user", require("./routes/user"));
+app.use("/rent", require("./routes/rent"));
 
 app.all("*", (req, res) => {
   res.status(404).json({ message: "Not Found" });
