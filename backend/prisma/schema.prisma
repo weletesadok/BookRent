@@ -28,6 +28,7 @@ model User {
   books       Book[]  
   ownedRents  Rent[]   @relation("OwnerRents") 
   rentedRents Rent[]   @relation("RenterRents") 
+  revenues    Revenue[]
 }
 
 
@@ -44,10 +45,11 @@ model Book {
   price          Float
   image          String[]
   rating         Int? @default(0)
-  rented         Boolean   @default(false)
+  rented         Int   @default(0)
   approved       Boolean   @default(false)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+  revenues       Revenue[]
 }
 
 model Rent {
@@ -61,4 +63,14 @@ model Rent {
   endDate    DateTime
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model Revenue {
+  id         Int      @id @default(autoincrement())
+  book       Book     @relation(fields: [bookId], references: [id])
+  bookId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  amount     Float
+  createdAt  DateTime @default(now())
 }
