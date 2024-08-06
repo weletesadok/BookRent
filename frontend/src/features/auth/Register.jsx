@@ -15,6 +15,10 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useRegisterMutation } from "./authApiSlice";
+import ClipLoader from "react-spinners/ClipLoader";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const schema = z.object({
   email: z.string().email("Invalid email address").min(1, "Email is required"),
@@ -30,6 +34,8 @@ const schema = z.object({
 
 const Register = () => {
   const [avatarPreview, setAvatarPreview] = useState(null);
+  const [files, setFiles] = useState(null);
+  const [registerUser, { isLoading }] = useRegisterMutation();
   const {
     control,
     handleSubmit,
@@ -49,16 +55,21 @@ const Register = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const response = await registerUser({
+        ...data,
+        files,
+      }).unwrap();
+      toast.success("Registration successful");
+    } catch (error) {
+      toast.error(error.data?.error ?? "registration failed");
+    }
   };
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setValue("avatar", file);
-      setAvatarPreview(URL.createObjectURL(file));
-    }
+    setFiles(Object.values(event.target.files));
+    setAvatarPreview(URL.createObjectURL(event.target.files[0]));
   };
 
   return (
@@ -67,6 +78,7 @@ const Register = () => {
       maxWidth="md"
       sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
     >
+      <ToastContainer />
       <Grid container spacing={0} sx={{ flexGrow: 1 }}>
         <Grid item xs={12} md={6}>
           <Paper
@@ -125,7 +137,7 @@ const Register = () => {
                     type="file"
                     accept="image/*"
                     style={{ display: "none" }}
-                    onChange={handleFileChange}
+                    onChange={(e) => handleFileChange(e)}
                   />
                   <Button
                     variant="contained"
@@ -236,8 +248,13 @@ const Register = () => {
                 color="primary"
                 fullWidth
                 sx={{ mt: 2, fontSize: "0.875rem" }}
+                disabled={isLoading}
               >
-                Sign Up
+                {isLoading ? (
+                  <ClipLoader size={20} color="#FFFFFF" />
+                ) : (
+                  "Sign Up"
+                )}
               </Button>
             </form>
             <Typography variant="body2" sx={{ mt: 2 }}>

@@ -7,3 +7,5 @@
 20240804	12:43:20	dd5d1afd-8a1b-4208-bd59-af63040b814f	Too Many Requests: Too many login attempts from this IP, please try again after a 60 second pause	POST	/login	undefined
 20240804	12:43:35	6337ad4b-0f46-4650-8824-bb8898bbad46	Too Many Requests: Too many login attempts from this IP, please try again after a 60 second pause	POST	/login	undefined
 20240804	13:04:44	929833cf-8692-4f70-92d4-c07e966db53f	Error: Not allowed by CORS	POST	/auth/register	null
+20240806	11:14:01	9c6a2a95-53ef-4b85-86c0-3600aa545e81	PayloadTooLargeError: request entity too large	POST	/auth/register	http://localhost:5173
+20240806	11:14:17	dbdc0b35-5685-4138-a977-a98b7219a4a8	PayloadTooLargeError: request entity too large	POST	/auth/register	http://localhost:5173

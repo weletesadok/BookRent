@@ -9,6 +9,8 @@ const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
 
 const register = async (req, res) => {
   const { email, password, phoneNumber, location, role } = req.body;
+  console.log(req.body);
+  console.log(req.fileUrls);
 
   try {
     const existingUser = await prisma.user.findUnique({ where: { email } });

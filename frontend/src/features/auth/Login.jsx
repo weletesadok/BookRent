@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Grid,
@@ -14,6 +14,8 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useLoginMutation } from "./authApiSlice";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const schema = z.object({
   email: z.string().email("Invalid email address").min(1, "Email is required"),
@@ -22,6 +24,7 @@ const schema = z.object({
 });
 
 const Login = () => {
+  const [login, { isLoading }] = useLoginMutation();
   const {
     control,
     handleSubmit,
@@ -35,8 +38,15 @@ const Login = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const res = await login(data).unwrap();
+      console.log(res);
+      // Handle successful login here
+    } catch (error) {
+      // Handle login error here
+      console.error("Failed to login: ", error);
+    }
   };
 
   return (
@@ -142,8 +152,9 @@ const Login = () => {
                 color="primary"
                 fullWidth
                 sx={{ mt: 2, fontSize: "0.875rem" }}
+                disabled={isLoading}
               >
-                Login
+                {isLoading ? <ClipLoader size={20} color="#FFFFFF" /> : "Login"}
               </Button>
             </form>
             <Typography variant="body2" sx={{ mt: 2 }}>
