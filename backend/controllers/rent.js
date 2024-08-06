@@ -1,9 +1,22 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const rent = async (req, res) => {
-  const { ownerId, renterId, totalPrice, startDate, endDate } = req.body;
+  const { ownerId, renterId, totalPrice, startDate, endDate, bookId } =
+    req.body;
 
   try {
+    const book = await prisma.book.findUnique({
+      where: { id: bookId },
+    });
+
+    if (!book) {
+      return res.status(404).json({ error: "Book not found" });
+    }
+
+    if (book.quantity <= 0) {
+      return res.status(400).json({ error: "Book is out of stock" });
+    }
+
     const newRent = await prisma.rent.create({
       data: {
         ownerId,
@@ -11,9 +24,27 @@ const rent = async (req, res) => {
         totalPrice,
         startDate: new Date(startDate),
         endDate: new Date(endDate),
+        bookId,
       },
     });
-    res.status(201).json(newRent);
+
+    const updatedBook = await prisma.book.update({
+      where: { id: bookId },
+      data: {
+        rented: book.rented + 1,
+        quantity: book.quantity - 1,
+      },
+    });
+
+    const revenue = await prisma.revenue.create({
+      data: {
+        bookId,
+        userId: ownerId,
+        amount: totalPrice,
+      },
+    });
+
+    res.status(201).json({ newRent, updatedBook, revenue });
   } catch (error) {
     res
       .status(500)
