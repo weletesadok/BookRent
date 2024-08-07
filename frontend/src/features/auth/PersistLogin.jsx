@@ -4,7 +4,7 @@ import { useRefreshMutation } from "./authApiSlice";
 import usePersist from "../../hooks/usePersist";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "./authSlice";
-import Loading from "../../components/SkeletonLoading";
+import Loading from "../../components/Loading";
 
 const PersistLogin = () => {
   const [persist] = usePersist();
@@ -17,13 +17,11 @@ const PersistLogin = () => {
     useRefreshMutation();
 
   useEffect(() => {
-    // if (effectRan.current === true || process.env.NODE_ENV !== "development") {
     const verifyRefreshToken = async () => {
       try {
         await refresh();
         setTrueSuccess(true);
       } catch (err) {
-        // console.error(err);
       }
     };
 

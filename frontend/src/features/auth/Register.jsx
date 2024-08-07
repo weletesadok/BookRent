@@ -19,6 +19,7 @@ import { useRegisterMutation } from "./authApiSlice";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
   email: z.string().email("Invalid email address").min(1, "Email is required"),
@@ -36,11 +37,13 @@ const Register = () => {
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [files, setFiles] = useState(null);
   const [registerUser, { isLoading }] = useRegisterMutation();
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
     register,
     setValue,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
@@ -49,7 +52,6 @@ const Register = () => {
       terms: false,
       email: "",
       password: "",
-      remember: false,
       phoneNumber: "",
       location: "",
     },
@@ -57,13 +59,19 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await registerUser({
+      await registerUser({
         ...data,
         files,
       }).unwrap();
       toast.success("Registration successful");
+      reset();
+      setAvatarPreview(null);
+      setFiles(null);
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
     } catch (error) {
-      toast.error(error.data?.error ?? "registration failed");
+      toast.error(error.data?.error ?? "Registration failed");
     }
   };
 

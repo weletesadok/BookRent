@@ -21,9 +21,9 @@ const addBook = async (req, res) => {
         category,
         publicationDate: new Date(publicationDate),
         details,
-        ownerId,
-        quantity,
-        price,
+        ownerId: Number(ownerId),
+        quantity: Number(quantity),
+        price: Number(price),
         image: req.fileUrls,
       },
     });
@@ -79,7 +79,7 @@ const deleteBook = async (req, res) => {
 
 const getAllBooks = async (req, res) => {
   const { search, sort, page = 1, category, limit = 10 } = req.query;
-  const skip = (page - 1) * limit;
+  const skip = (Number(page) - 1) * Number(limit);
 
   try {
     const where = {};
@@ -100,7 +100,7 @@ const getAllBooks = async (req, res) => {
       where,
       orderBy: sort ? { [sort]: "asc" } : undefined,
       skip,
-      take: pageSize,
+      take: Number(limit),
     });
 
     const totalBooks = await prisma.book.count({ where });
@@ -108,9 +108,10 @@ const getAllBooks = async (req, res) => {
     res.json({
       books,
       totalBooks,
-      totalPages: Math.ceil(totalBooks / pageSize),
+      totalPages: Math.ceil(totalBooks / Number(limit)),
     });
   } catch (error) {
+    console.log(error);
     res
       .status(500)
       .json({ error: "Internal Server Error", message: JSON.stringify(error) });
