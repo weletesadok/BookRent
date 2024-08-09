@@ -16,6 +16,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLoginMutation } from "./authApiSlice";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import usePersist from "../../hooks/usePersist";
+import { setCredentials } from "./authSlice";
 
 const schema = z.object({
   email: z.string().email("Invalid email address").min(1, "Email is required"),
@@ -25,6 +29,12 @@ const schema = z.object({
 
 const Login = () => {
   const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleCheckboxClick = () => {
+    setPersist((prev) => !prev);
+  };
+  const [persist, setPersist] = usePersist();
   const {
     control,
     handleSubmit,
@@ -41,10 +51,9 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       const res = await login(data).unwrap();
-      console.log(res);
-      // Handle successful login here
+      dispatch(setCredentials({ accessToken: res.data?.accessToken }));
+      navigate("/");
     } catch (error) {
-      // Handle login error here
       console.error("Failed to login: ", error);
     }
   };
@@ -140,7 +149,13 @@ const Login = () => {
                 control={control}
                 render={({ field }) => (
                   <FormControlLabel
-                    control={<Checkbox {...field} color="primary" />}
+                    control={
+                      <Checkbox
+                        {...field}
+                        onClick={() => handleCheckboxClick()}
+                        color="primary"
+                      />
+                    }
                     label="Remember Me"
                     sx={{ mt: 2 }}
                   />

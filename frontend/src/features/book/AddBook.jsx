@@ -21,6 +21,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const validationSchema = z.object({
   name: z.string().min(1, "Book name is required"),
@@ -39,6 +40,8 @@ const validationSchema = z.object({
 const AddBookForm = () => {
   const [filePreviews, setFilePreviews] = useState([]);
   const [addBook, { isLoading }] = useAddBookMutation();
+  const auth = useAuth();
+  console.log(auth);
   const navigate = useNavigate();
   const {
     control,
@@ -62,7 +65,7 @@ const AddBookForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      await addBook({ ...data, ownerId: 22 }).unwrap();
+      await addBook({ ...data, ownerId: auth.id }).unwrap();
       toast.success("Book added successfully");
       reset();
       setFilePreviews([]);

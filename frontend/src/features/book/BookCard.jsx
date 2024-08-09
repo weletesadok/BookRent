@@ -26,12 +26,11 @@ export default ({ book }) => {
   };
   function removeFilesPrefix(input) {
     if (typeof input === "string") {
-      return `http://localhost:8000${input.replace("/files", "")}`;
+      return `http://localhost:8000${input.slice(5)}`;
     } else {
-      return "https://plus.unsplash.com/premium_photo-1669652639337-c513cc42ead6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Ym9va3N8ZW58MHx8MHx8fDA%3D";
+      return "https://via.placeholder.com/150x200?text=Book+Cover";
     }
   }
-
   return (
     <Card
       sx={{
@@ -48,7 +47,7 @@ export default ({ book }) => {
       <CardMedia
         component="img"
         height="200"
-        image={removeFilesPrefix(book.image[0])}
+        image={book.image ? removeFilesPrefix(book.image[0]) : ""}
         alt={"Book Image"}
         sx={{ transition: "opacity 0.3s ease" }}
       />

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -12,42 +13,57 @@ import {
 } from "@mui/material";
 import { Edit, Delete, Star as StarIcon } from "@mui/icons-material";
 import Carousel from "react-material-ui-carousel";
-import { useNavigate } from "react-router-dom";
-
-const dummyBook = {
-  id: 1,
-  name: "The Great Gatsby",
-  author: "F. Scott Fitzgerald",
-  category: "Fiction",
-  price: 150,
-  details:
-    "A classic novel of the Roaring Twenties, exploring themes of wealth, love, and the American Dream.",
-  images: [
-    "https://picsum.photos/id/1/200/300",
-    "https://picsum.photos/id/72/200/300",
-    "https://picsum.photos/id/3/200/300",
-  ],
-};
+import { useGetBookByIdQuery, useDeleteBookMutation } from "./bookSlice";
+import ClipLoader from "react-spinners/ClipLoader";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BookDetails = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
 
+  const { data: book, error, isLoading } = useGetBookByIdQuery(id);
+  const [deleteBook, { isLoading: isDeleting }] = useDeleteBookMutation();
+
   const handleEdit = () => {
-    navigate(`/book/edit/${dummyBook.id}`);
+    navigate(`/book/edit/${id}`);
   };
 
-  const handleDelete = () => {
-    console.log("Delete button clicked");
+  const handleDelete = async () => {
+    try {
+      await deleteBook(id).unwrap();
+      navigate("/book");
+    } catch (err) {
+      toast.error("Failed to delete the book");
+      console.error("Failed to delete the book: ", err);
+    }
   };
 
   const handleRent = () => {
     console.log("Rent button clicked");
   };
 
+  function removeFilesPrefix(input) {
+    if (typeof input === "string") {
+      return `http://localhost:8000${input.slice(5)}`;
+    } else {
+      return "https://via.placeholder.com/150x200?text=Book+Cover";
+    }
+  }
+
+  if (isLoading) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  if (error) {
+    return <Typography>Error loading book details</Typography>;
+  }
+
   return (
     <Box sx={{ maxWidth: 800, margin: "auto", padding: 3 }}>
+      <ToastContainer />
       <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
-        {dummyBook.name}
+        {book.name}
       </Typography>
       <Card>
         <Carousel
@@ -59,28 +75,45 @@ const BookDetails = () => {
             padding: 5,
           }}
         >
-          {dummyBook.images.map((image, index) => (
+          {book.image?.length > 0 ? (
+            book.image.map((image, index) => (
+              <Box
+                key={index}
+                sx={{
+                  height: 400,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  overflow: "hidden",
+                  borderRadius: 5,
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  image={removeFilesPrefix(image)}
+                  alt={`Book Image ${index + 1}`}
+                  sx={{
+                    height: "100%",
+                    width: "100%",
+                    objectFit: "contain",
+                  }}
+                />
+              </Box>
+            ))
+          ) : (
             <Box
-              key={index}
               sx={{
                 height: 400,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                overflow: "hidden",
                 borderRadius: 5,
+                backgroundColor: "grey.300",
               }}
             >
-              <CardMedia
-                component="img"
-                image={image}
-                alt={`Book Image ${index + 1}`}
-                sx={{
-                  objectFit: "contain",
-                }}
-              />
+              <Typography variant="h6">No images available</Typography>
             </Box>
-          ))}
+          )}
         </Carousel>
         <CardContent sx={{ backgroundColor: "#F5F5F5" }}>
           <Grid container spacing={2} sx={{ mb: 2 }}>
@@ -97,7 +130,7 @@ const BookDetails = () => {
                   variant="body1"
                   sx={{ fontWeight: "medium", color: "text.primary" }}
                 >
-                  By {dummyBook.author}
+                  By {book.author}
                 </Typography>
               </Box>
             </Grid>
@@ -114,7 +147,7 @@ const BookDetails = () => {
                   variant="body1"
                   sx={{ fontWeight: "medium", color: "text.primary" }}
                 >
-                  {dummyBook.category}
+                  {book.category.join(", ")}
                 </Typography>
               </Box>
             </Grid>
@@ -131,7 +164,7 @@ const BookDetails = () => {
                   variant="body1"
                   sx={{ fontWeight: "bold", color: "text.primary" }}
                 >
-                  {dummyBook.price} ETB
+                  {book.price} ETB
                 </Typography>
               </Box>
             </Grid>
@@ -143,7 +176,7 @@ const BookDetails = () => {
             Details
           </Typography>
           <Typography variant="body1" sx={{ color: "text.primary" }}>
-            {dummyBook.details}
+            {book.details}
           </Typography>
           <Grid item xs={12} sx={{ mt: 2 }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -154,7 +187,9 @@ const BookDetails = () => {
                 {[...Array(5)].map((_, index) => (
                   <StarIcon
                     key={index}
-                    sx={{ color: index < 4 ? "gold" : "action.disabled" }}
+                    sx={{
+                      color: index < book.rating ? "gold" : "action.disabled",
+                    }}
                   />
                 ))}
               </Box>
@@ -175,9 +210,13 @@ const BookDetails = () => {
             <IconButton color="primary" onClick={handleEdit}>
               <Edit />
             </IconButton>
-            <IconButton color="error" onClick={handleDelete}>
-              <Delete />
-            </IconButton>
+            {isDeleting ? (
+              <ClipLoader size={24} color="red" />
+            ) : (
+              <IconButton color="error" onClick={handleDelete}>
+                <Delete />
+              </IconButton>
+            )}
           </Box>
         </CardActions>
       </Card>
