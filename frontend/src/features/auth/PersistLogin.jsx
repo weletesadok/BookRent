@@ -1,9 +1,10 @@
-import { Outlet, Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { Outlet } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import { useRefreshMutation } from "./authApiSlice";
 import usePersist from "../../hooks/usePersist";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "./authSlice";
+import { CircularProgress, Box } from "@mui/material";
 
 const PersistLogin = () => {
   const [persist] = usePersist();
@@ -15,7 +16,7 @@ const PersistLogin = () => {
   useEffect(() => {
     const verifyRefreshToken = async () => {
       try {
-        const res = await refresh();
+        await refresh();
       } catch (err) {
         console.log(err);
       }
@@ -23,12 +24,27 @@ const PersistLogin = () => {
 
     if (!token && persist) verifyRefreshToken();
 
-    return () => (effectRan.current = true);
-  }, []);
+    return () => {
+      effectRan.current = true;
+    };
+  }, [token, persist, refresh]);
 
   if (isLoading) {
-    return <div>Loading ...</div>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
+
   return <Outlet />;
 };
+
 export default PersistLogin;

@@ -13,12 +13,21 @@ const addBook = async (req, res) => {
     quantity,
     price,
   } = req.body;
+  const user = prisma.user.findUnique({ where: { id: ownerId } });
+  if (!user) {
+    return res.status(400).json({ error: "User Not Found" });
+  }
+  if (!user.approved) {
+    return res
+      .status(400)
+      .json({ error: "User is not approved to upload books" });
+  }
   try {
     const book = await prisma.book.create({
       data: {
         name,
         author,
-        category,
+        category: new Array().concat(category),
         publicationDate: new Date(publicationDate),
         details,
         ownerId: Number(ownerId),
@@ -101,6 +110,7 @@ const getAllBooks = async (req, res) => {
       orderBy: sort ? { [sort]: "asc" } : undefined,
       skip,
       take: Number(limit),
+      include: { owner: true },
     });
 
     const totalBooks = await prisma.book.count({ where });
@@ -168,19 +178,27 @@ const getBookStatisticsByCategory = async (req, res) => {
 const approveBook = async (req, res) => {
   try {
     const { bookId } = req.params;
+    const id = Number(bookId);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "Invalid book ID" });
+    }
 
-    const book = await prisma.book.findById(bookId);
+    const book = await prisma.book.findUnique({ where: { id } });
 
     if (!book) {
       return res.status(404).json({ message: "Book not found" });
     }
 
-    book.approved = true;
-    await book.save();
+    const updatedBook = await prisma.book.update({
+      where: { id },
+      data: { approved: true },
+    });
 
-    res.status(200).json({ message: "Book approved successfully", book });
+    res
+      .status(200)
+      .json({ message: "Book approved successfully", book: updatedBook });
   } catch (error) {
-    console.error(error);
+    console.error("Error approving book:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

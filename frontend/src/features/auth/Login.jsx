@@ -20,6 +20,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import usePersist from "../../hooks/usePersist";
 import { setCredentials } from "./authSlice";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const schema = z.object({
   email: z.string().email("Invalid email address").min(1, "Email is required"),
@@ -52,9 +54,11 @@ const Login = () => {
     try {
       const res = await login(data).unwrap();
       dispatch(setCredentials({ accessToken: res.data?.accessToken }));
+      toast.success("Login successful!");
       navigate("/");
+      location.reload();
     } catch (error) {
-      console.error("Failed to login: ", error);
+      toast.error(JSON.stringify(error));
     }
   };
 
@@ -154,6 +158,7 @@ const Login = () => {
                         {...field}
                         onClick={() => handleCheckboxClick()}
                         color="primary"
+                        checked={persist}
                       />
                     }
                     label="Remember Me"

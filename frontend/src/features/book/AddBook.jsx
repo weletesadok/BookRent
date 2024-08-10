@@ -41,7 +41,6 @@ const AddBookForm = () => {
   const [filePreviews, setFilePreviews] = useState([]);
   const [addBook, { isLoading }] = useAddBookMutation();
   const auth = useAuth();
-  console.log(auth);
   const navigate = useNavigate();
   const {
     control,
@@ -64,16 +63,17 @@ const AddBookForm = () => {
   });
 
   const onSubmit = async (data) => {
+    console.log(data);
     try {
       await addBook({ ...data, ownerId: auth.id }).unwrap();
       toast.success("Book added successfully");
       reset();
       setFilePreviews([]);
       setTimeout(() => {
-        navigate("/book");
+        navigate("/");
       }, 2000);
     } catch (error) {
-      toast.error(error.data?.message ?? "Book addition failed");
+      toast.error(JSON.stringify(error));
     }
   };
 
@@ -104,18 +104,12 @@ const AddBookForm = () => {
   return (
     <Box
       sx={{
-        maxWidth: 600,
-        margin: "auto",
-        padding: 2,
-        borderRadius: 2,
-        boxShadow: 3,
-        backgroundColor: "white",
+        width: "80%",
+        margin: "1rem auto",
       }}
     >
       <ToastContainer />
-      <Typography variant="h5" component="h2" gutterBottom>
-        Add a New Book
-      </Typography>
+
       <Divider sx={{ mb: 2 }} />
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>

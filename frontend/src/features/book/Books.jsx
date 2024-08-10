@@ -9,6 +9,7 @@ import {
   Select,
   FormControl,
   InputLabel,
+  CircularProgress,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonIcon from "@mui/icons-material/Person";
@@ -16,8 +17,12 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import SortIcon from "@mui/icons-material/Sort";
 import BookCard from "./BookCard";
 import { useGetAllBooksQuery } from "./bookSlice";
+import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { useSendLogoutMutation } from "../auth/authApiSlice";
 
 export default function MyComponent() {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("");
   const [page, setPage] = useState(1);
@@ -26,6 +31,7 @@ export default function MyComponent() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   const [sortAnchorEl, setSortAnchorEl] = useState(null);
+  const auth = useAuth();
 
   const { data, error, isLoading } = useGetAllBooksQuery({
     search,
@@ -34,9 +40,15 @@ export default function MyComponent() {
     category,
     limit,
   });
-
+  const [logout] = useSendLogoutMutation();
   const handleMenuOpen = (event, setter) => {
     setter(event.currentTarget);
+  };
+
+  const handleLogOUt = () => {
+    localStorage.clear();
+    logout();
+    location.reload();
   };
 
   const handleMenuClose = (setter) => {
@@ -54,7 +66,14 @@ export default function MyComponent() {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, p: 2 }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        p: 2,
+      }}
+    >
       <Box sx={{ flex: "75%", display: "flex", alignItems: "center", gap: 2 }}>
         <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
           <SearchIcon sx={{ color: "orange", mr: 1 }} />
@@ -73,9 +92,15 @@ export default function MyComponent() {
           open={Boolean(anchorEl)}
           onClose={() => handleMenuClose(setAnchorEl)}
         >
-          <MenuItem onClick={() => alert("Logout")}>Logout</MenuItem>
-          <MenuItem onClick={() => alert("Login")}>Login</MenuItem>
-          <MenuItem onClick={() => alert("Dashboard")}>Dashboard</MenuItem>
+          {auth.role && (
+            <MenuItem onClick={() => handleLogOUt()}>Logout</MenuItem>
+          )}
+          {!auth.role && (
+            <MenuItem onClick={() => navigate("/login")}>Login</MenuItem>
+          )}
+          {auth.role === "OWNER" && (
+            <MenuItem onClick={() => navigate("/dash")}>Dashboard</MenuItem>
+          )}
         </Menu>
       </Box>
 
@@ -133,21 +158,19 @@ export default function MyComponent() {
             mt: 2,
             p: 2,
             backgroundColor: "grey.200",
+            justifyContent: "flex-start",
             display: "flex",
             flexWrap: "wrap",
-            gap: 2,
+            gap: 1,
+            flex: "1",
           }}
         >
           {isLoading ? (
-            <Box>Loading...</Box>
+            <CircularProgress />
           ) : error ? (
             <Box>Error loading books</Box>
           ) : (
-            data.books.map((book) => (
-              <Box key={book.id} sx={{ flex: "1 1 300px" }}>
-                <BookCard book={book} />
-              </Box>
-            ))
+            data.books.map((book) => <BookCard key={book.id} book={book} />)
           )}
         </Box>
       </Box>

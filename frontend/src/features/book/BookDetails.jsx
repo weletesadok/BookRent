@@ -206,18 +206,6 @@ const BookDetails = () => {
           <Button variant="contained" color="primary" onClick={handleRent}>
             Borrow
           </Button>
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <IconButton color="primary" onClick={handleEdit}>
-              <Edit />
-            </IconButton>
-            {isDeleting ? (
-              <ClipLoader size={24} color="red" />
-            ) : (
-              <IconButton color="error" onClick={handleDelete}>
-                <Delete />
-              </IconButton>
-            )}
-          </Box>
         </CardActions>
       </Card>
     </Box>

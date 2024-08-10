@@ -21,13 +21,15 @@ import {
   Logout,
   Add,
 } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import { useSendLogoutMutation } from "../features/auth/authApiSlice";
 
 const BUTTONS = {
   DASHBOARD: "dashboard",
   BOOKS: "books",
-  OWNERS: "owners",
   USERS: "users",
-  ADD: "Add Book",
+  ADD: "addbook",
   NOTIFICATIONS: "notifications",
   SETTINGS: "settings",
 };
@@ -35,6 +37,16 @@ const BUTTONS = {
 const Sidebar = () => {
   const [expanded, setExpanded] = useState(true);
   const [activeButton, setActiveButton] = useState(BUTTONS.DASHBOARD);
+  const navigate = useNavigate();
+  const { role } = useAuth();
+  const [logout] = useSendLogoutMutation();
+
+  const handleLogOUt = () => {
+    localStorage.clear();
+    logout();
+    navigate("/");
+    location.reload();
+  };
 
   const handleExpandCollapse = () => {
     setExpanded((prev) => !prev);
@@ -42,6 +54,7 @@ const Sidebar = () => {
 
   const handleButtonClick = (button) => {
     setActiveButton(button);
+    navigate(button === BUTTONS.DASHBOARD ? "/dash" : `/dash/${button}`);
   };
 
   return (
@@ -105,54 +118,56 @@ const Sidebar = () => {
       <Box sx={{ flexGrow: 1 }}>
         <List>
           {Object.entries(BUTTONS)
-            .slice(0, 5)
-            .map(([key, value]) => (
-              <ListItem
-                button
-                key={value}
-                onClick={() => handleButtonClick(value)}
-                sx={{
-                  padding: "6px 12px",
-                  backgroundColor:
-                    activeButton === value ? "#00ABFF" : "transparent",
-                  "&:hover": {
-                    backgroundColor:
-                      activeButton !== value ? "#2D3A6E" : "#00ABFF",
-                  },
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    color: activeButton === value ? "#FFFFFF" : "#B0B0B0",
-                    minWidth: "auto",
-                    fontSize: "1.2rem",
-                  }}
-                >
-                  {
-                    {
-                      [BUTTONS.DASHBOARD]: <Dashboard />,
-                      [BUTTONS.BOOKS]: <LibraryBooks />,
-                      [BUTTONS.OWNERS]: <People />,
-                      [BUTTONS.USERS]: <Person />,
-                      [BUTTONS.ADD]: <Add />,
-                    }[value]
-                  }
-                </ListItemIcon>
-                {expanded && (
-                  <ListItemText
-                    primary={value.charAt(0).toUpperCase() + value.slice(1)}
-                    sx={{ fontSize: "0.875rem" }}
-                  />
-                )}
-              </ListItem>
-            ))}
+            .slice(0, 4)
+            .map(
+              ([key, value]) =>
+                (value !== BUTTONS.USERS || role === "ADMIN") && (
+                  <ListItem
+                    button
+                    key={value}
+                    onClick={() => handleButtonClick(value)}
+                    sx={{
+                      padding: "6px 12px",
+                      backgroundColor:
+                        activeButton === value ? "#00ABFF" : "transparent",
+                      "&:hover": {
+                        backgroundColor:
+                          activeButton !== value ? "#2D3A6E" : "#00ABFF",
+                      },
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        color: activeButton === value ? "#FFFFFF" : "#B0B0B0",
+                        minWidth: "auto",
+                        fontSize: "1.2rem",
+                      }}
+                    >
+                      {
+                        {
+                          [BUTTONS.DASHBOARD]: <Dashboard />,
+                          [BUTTONS.BOOKS]: <LibraryBooks />,
+                          [BUTTONS.USERS]: <Person />,
+                          [BUTTONS.ADD]: <Add />,
+                        }[value]
+                      }
+                    </ListItemIcon>
+                    {expanded && (
+                      <ListItemText
+                        primary={value.charAt(0).toUpperCase() + value.slice(1)}
+                        sx={{ fontSize: "0.875rem" }}
+                      />
+                    )}
+                  </ListItem>
+                )
+            )}
         </List>
 
         <Divider sx={{ borderColor: "#FFFFFF" }} />
 
         <List>
           {Object.entries(BUTTONS)
-            .slice(5)
+            .slice(4)
             .map(([key, value]) => (
               <ListItem
                 button
@@ -215,6 +230,7 @@ const Sidebar = () => {
               backgroundColor: "#010101",
             },
           }}
+          onClick={() => handleLogOUt()}
         >
           <Logout sx={{ marginRight: "4px", fontSize: "1rem" }} />
           {expanded ? "Logout" : ""}

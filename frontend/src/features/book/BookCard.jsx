@@ -39,7 +39,7 @@ export default ({ book }) => {
         position: "relative",
         overflow: "hidden",
         transition: "all 0.3s ease",
-        height: hover ? "220px" : "200px",
+        height: "200px",
       }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
