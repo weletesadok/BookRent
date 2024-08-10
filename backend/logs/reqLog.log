@@ -3231,3 +3231,17 @@
 20240810	14:05:54	50620561-cde3-4418-9087-e54a5003b3b7	POST	/auth/refresh	http://localhost:5173
 20240810	14:05:59	f754e379-ea28-471e-880e-8fd011775a90	OPTIONS	/book/statistics/category	http://localhost:5173
 20240810	14:05:59	60b482fe-8d1e-4e74-a25c-5cc154717316	GET	/book/statistics/category	http://localhost:5173
+20240810	14:18:30	8f21a955-aa12-4d94-a544-c20bb25ac59b	OPTIONS	/book?search=&sort=&page=1&category=&limit=4	http://localhost:5173
+20240810	14:18:30	e9883b8b-0bec-4b64-b8ed-d5fb8a7961df	GET	/book?search=&sort=&page=1&category=&limit=4	http://localhost:5173
+20240810	14:18:45	aa2243c9-be5b-4219-a438-f6543c6998e5	OPTIONS	/user?search=&page=1&limit=4	http://localhost:5173
+20240810	14:18:46	d8b8ab1e-0964-4061-8c9f-f4e96605bcf4	GET	/user?search=&page=1&limit=4	http://localhost:5173
+20240810	14:25:53	aa8d3db2-9db8-43a9-a922-af34fbee7ede	OPTIONS	/book?search=&sort=&page=1&category=&limit=4	http://localhost:5173
+20240810	14:25:53	1b5d3151-9bb7-47cb-97f2-fde275c63566	GET	/book?search=&sort=&page=1&category=&limit=4	http://localhost:5173
+20240810	14:25:56	e7a2ae85-c235-4176-a3fb-a79152573472	OPTIONS	/book/statistics/category	http://localhost:5173
+20240810	14:25:56	e971cf8d-a683-44d3-9d55-da0bd5297279	GET	/book/statistics/category	http://localhost:5173
+20240810	14:27:11	f9aa5f6e-a23c-46ac-9f02-9168961361ea	OPTIONS	/book/statistics/category	http://localhost:5173
+20240810	14:27:11	2e0f4e5c-adce-4df9-bc1e-070d20fb9eea	GET	/book/statistics/category	http://localhost:5173
+20240810	14:31:02	12a16758-2537-46dc-969b-b2870d4b08cc	OPTIONS	/book?search=&sort=&page=1&category=&limit=4	http://localhost:5173
+20240810	14:31:02	01148a2d-63b5-4401-affb-11410e274c8d	GET	/book?search=&sort=&page=1&category=&limit=4	http://localhost:5173
+20240810	14:31:05	7aa4e733-5544-4b80-a237-e5cb4964d4ac	OPTIONS	/user?search=&page=1&limit=4	http://localhost:5173
+20240810	14:31:05	874f7d8a-7c02-43db-a00e-f8024acc44c8	GET	/user?search=&page=1&limit=4	http://localhost:5173
