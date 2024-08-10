@@ -6,4 +6,8 @@ npx prisma migrate dev --name init
 # if it didn't automatically generates you prisma client use the next else run the server
 npx prisma generate
 npm run dev
+
+#navigate to frontedn directory
+npm i
+npm run dev
 ```
