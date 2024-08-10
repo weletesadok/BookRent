@@ -20,9 +20,9 @@ router.get("/", getAllBooks);
 router.get("/:id", getBookById);
 router.get(
   "/statistics/category",
-  roleChecker("read", "Book"),
+  // roleChecker("read", "Book"),
   getBookStatisticsByCategory
 );
-router.put("/approve/:bookId", roleChecker("approve", "Book"), approveBook);
+router.put("/approve/:bookId",  approveBook);
 
 module.exports = router;

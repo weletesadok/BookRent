@@ -33,8 +33,8 @@ export default () => {
             <Route index element={<DashIndex />} />
             <Route path="addbook" element={<AddBookForm />} />
             <Route path="books" element={<BooksTable />} />
+            <Route path="users" element={<Users />} />
             <Route element={<RequireAuth allowedRole={"ADMIN"} />}>
-              <Route path="users" element={<Users />} />
               <Route path="owners" element={<Users />} />
             </Route>
           </Route>

@@ -40,7 +40,7 @@ const roleChecker = (action, subject) => {
     try {
       const token = req.cookies.refreshToken;
       if (!token) return res.status(401).json({ error: "Unauthorized" });
-      
+
       const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
       const userId = decoded.userId;
 

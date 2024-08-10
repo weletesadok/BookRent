@@ -121,7 +121,7 @@ const Sidebar = () => {
             .slice(0, 4)
             .map(
               ([key, value]) =>
-                (value !== BUTTONS.USERS || role === "ADMIN") && (
+                (value !== BUTTONS.USERS || role === "OWNER") && (
                   <ListItem
                     button
                     key={value}

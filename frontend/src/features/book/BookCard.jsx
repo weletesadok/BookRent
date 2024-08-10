@@ -11,7 +11,7 @@ import {
 import { Star as StarIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
-export default ({ book }) => {
+const BookCard = ({ book }) => {
   const [hover, setHover] = useState(false);
   const navigate = useNavigate();
 
@@ -19,22 +19,26 @@ export default ({ book }) => {
     navigate(`/book/${book.id}`);
   };
 
+  // Function to render stars based on rating
   const renderRating = (rating) => {
     return [...Array(5)].map((_, index) => (
       <StarIcon key={index} sx={{ color: index < rating ? "gold" : "gray" }} />
     ));
   };
-  function removeFilesPrefix(input) {
+
+  // Function to remove file prefix from image URL
+  const removeFilesPrefix = (input) => {
     if (typeof input === "string") {
       return `http://localhost:8000${input.slice(5)}`;
     } else {
       return "https://via.placeholder.com/150x200?text=Book+Cover";
     }
-  }
+  };
+
   return (
     <Card
       sx={{
-        maxWidth: 300,
+        width: 300,
         margin: 2,
         position: "relative",
         overflow: "hidden",
@@ -134,3 +138,5 @@ export default ({ book }) => {
     </Card>
   );
 };
+
+export default BookCard;
