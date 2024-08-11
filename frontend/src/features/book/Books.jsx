@@ -98,6 +98,9 @@ export default function MyComponent() {
           {!auth.role && (
             <MenuItem onClick={() => navigate("/login")}>Login</MenuItem>
           )}
+          {!auth.role && (
+            <MenuItem onClick={() => navigate("/register")}>Sign Up</MenuItem>
+          )}
           {auth.role === "OWNER" && (
             <MenuItem onClick={() => navigate("/dash")}>Dashboard</MenuItem>
           )}

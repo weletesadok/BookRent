@@ -13,7 +13,7 @@ const addBook = async (req, res) => {
     quantity,
     price,
   } = req.body;
-  const user = prisma.user.findUnique({ where: { id: ownerId } });
+  const user = await prisma.user.findUnique({ where: { id: Number(ownerId) } });
   if (!user) {
     return res.status(400).json({ error: "User Not Found" });
   }

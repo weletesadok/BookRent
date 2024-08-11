@@ -9,3 +9,33 @@
 20240804	13:04:44	929833cf-8692-4f70-92d4-c07e966db53f	Error: Not allowed by CORS	POST	/auth/register	null
 20240806	11:14:01	9c6a2a95-53ef-4b85-86c0-3600aa545e81	PayloadTooLargeError: request entity too large	POST	/auth/register	http://localhost:5173
 20240806	11:14:17	dbdc0b35-5685-4138-a977-a98b7219a4a8	PayloadTooLargeError: request entity too large	POST	/auth/register	http://localhost:5173
+20240811	02:21:38	579bfc92-bb45-4e94-b250-1db145d4d8b8	PrismaClientValidationError: 
+Invalid `prisma.user.findUnique()` invocation in
+/home/none/development/BookRent/backend/controllers/book.js:16:34
+
+  13   quantity,
+  14   price,
+  15 } = req.body;
+→ 16 const user = await prisma.user.findUnique({
+       where: {
+         id: "28"
+             ~~~~
+       }
+     })
+
+Argument `id`: Invalid value provided. Expected Int, provided String.	POST	/book	http://localhost:5173
+20240811	02:34:08	63d8fe21-d573-46b2-a2f8-b13955844ac2	PrismaClientValidationError: 
+Invalid `prisma.user.findUnique()` invocation in
+/home/none/development/BookRent/backend/controllers/book.js:16:34
+
+  13   quantity,
+  14   price,
+  15 } = req.body;
+→ 16 const user = await prisma.user.findUnique({
+       where: {
+         id: "28"
+             ~~~~
+       }
+     })
+
+Argument `id`: Invalid value provided. Expected Int, provided String.	POST	/book	http://localhost:5173

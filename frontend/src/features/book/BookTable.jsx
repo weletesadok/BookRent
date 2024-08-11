@@ -33,7 +33,8 @@ const BooksTable = () => {
     if (!data?.books) return [];
     if (role === "ADMIN") return data.books;
     if (role === "OWNER") {
-      return data.books.filter((item) => item.ownerId === id);
+      // return data.books.filter((item) => item.ownerId === id);
+      return data.books;
     }
     return [];
   };
